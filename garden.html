@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your garden — Petal Post</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="garden">
+
+<!-- No shared drifting-butterfly overlay on the garden — here butterflies
+     fly in and perch on a flower or tree when it's clicked instead. -->
+
+<div class="page" id="page-garden">
+  <div class="topbar"><a class="back" href="index.html">← back</a><span class="who" id="gardenWho"></span></div>
+  <div class="page-banner"><div class="chapter">Chapter Three</div><h2 class="can-perch" style="font-size:22px;">Your garden</h2></div>
+  <div class="garden-scene" id="gardenScene"></div>
+  <div id="notePopup" class="note-popup" style="display:none;"></div>
+  <div style="display:flex; justify-content:flex-end; padding:12px 22px 0; position:relative; z-index:2;">
+    <a class="ghost-btn" id="notifLink" href="notifications.html">🔔 notifications</a>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

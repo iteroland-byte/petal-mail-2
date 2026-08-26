@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>It bloomed — Petal Post</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="bloom">
+
+<div class="world" id="world"></div>
+
+<div class="page" id="page-bloom">
+  <div id="bloomImgHolder"></div>
+  <div class="bloom-name can-perch" id="bloomName">loading…</div>
+  <div class="bloom-meaning" id="bloomMeaning"></div>
+  <div class="bloom-note" id="bloomNote"></div>
+  <div class="bloom-from" id="bloomFrom"></div>
+  <div id="claimBox" style="margin-top:26px; max-width:320px;">
+    <label class="field-label" style="text-align:left;">Save it to a garden — pick a handle (yours, or a new one)</label>
+    <input type="text" id="claimHandleInput" placeholder="a-handle-just-for-you">
+    <div class="err" id="claimErr"></div>
+    <button class="primary-btn can-perch" id="claimBtn">Save to my garden</button>
+    <button class="ghost-btn" style="margin-top:10px;" id="skipClaimBtn">skip — just keep this link</button>
+  </div>
+  <button class="ghost-btn" style="margin-top:20px;" id="doneBtn">done</button>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
