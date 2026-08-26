@@ -243,43 +243,65 @@ label.field-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.07
 .bloom-note{ margin-top:24px; max-width:400px; background:var(--card); border:2px solid var(--line); border-radius:16px; padding:18px; font-style:italic; }
 .bloom-from{ margin-top:10px; font-size:12px; color:var(--ink-soft); }
 
-/* ---------- GARDEN SCENE (illustrated, no drifting overlay butterflies here — they perch instead) ---------- */
+/* ---------- GARDEN SCENE (illustrated, no drifting overlay butterflies here — they perch instead) ----------
+   Sky elements (sun/clouds) are kept small and subtle on purpose — the
+   trees, grass and flower bed are the focus, not the sky. */
 .garden-scene{
-  position:relative; height:360px; overflow:hidden; border-radius:0 0 26px 26px;
-  background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 45%, var(--hill-front) 46%, var(--hill-dark) 100%);
+  position:relative; height:460px; overflow:hidden; border-radius:0 0 26px 26px;
+  background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 40%, var(--hill-front) 41%, var(--hill-dark) 100%);
 }
-.g-sun{ position:absolute; top:14px; right:26px; width:52px; height:52px; border-radius:50%;
-  background:radial-gradient(circle, #FFF6D9, var(--butter) 65%, transparent 75%); }
-.g-cloud{ position:absolute; width:56px; height:20px; background:#fff; opacity:0.85; border-radius:20px; animation:gdrift linear infinite; }
-.g-cloud::before, .g-cloud::after{ content:""; position:absolute; background:#fff; border-radius:50%; }
-.g-cloud::before{ width:24px; height:24px; top:-10px; left:6px; }
-.g-cloud::after{ width:18px; height:18px; top:-7px; left:28px; }
-@keyframes gdrift{ from{ transform:translateX(-70px);} to{ transform:translateX(480px);} }
-.g-bird{ position:absolute; font-size:15px; animation:gdrift linear infinite, gbob 1.6s ease-in-out infinite; cursor:pointer; }
-@keyframes gbob{ 0%,100%{ margin-top:0;} 50%{ margin-top:-5px;} }
-.g-hill-back{ position:absolute; bottom:56px; left:-10%; width:120%; height:60px; background:var(--hill-back); opacity:0.55; border-radius:50% 50% 0 0/100% 100% 0 0; }
-.g-tree{ position:absolute; bottom:64px; cursor:pointer; }
-.g-tree .trunk{ width:10px; height:34px; background:var(--soil-dark); margin:0 auto; border-radius:3px; }
-.g-tree .canopy{ position:relative; width:56px; height:50px; background:var(--leaf); border-radius:50% 45% 50% 45%; margin:0 auto -14px; transform-origin:bottom center; animation:sway ease-in-out infinite; box-shadow:-10px 6px 0 -6px var(--leaf-dark) inset; }
-.g-bush{ position:absolute; bottom:60px; width:40px; height:26px; background:var(--leaf); border-radius:50% 50% 40% 40%; transform-origin:bottom center; animation:sway ease-in-out infinite; }
-@keyframes sway{ 0%,100%{ transform:rotate(-3.5deg);} 50%{ transform:rotate(3.5deg);} }
-.g-path{ position:absolute; bottom:0; left:0; right:0; height:36px; background:var(--soil); }
-.g-path::after{ content:""; position:absolute; top:50%; left:0; right:0; height:2px;
-  background:repeating-linear-gradient(90deg,#EDE0C8 0 16px, transparent 16px 32px); }
-.g-figure{ position:absolute; bottom:6px; font-size:20px; animation:gwalk linear infinite; }
-@keyframes gwalk{ from{ transform:translateX(-40px);} to{ transform:translateX(480px);} }
+.g-sun{ position:absolute; top:10px; right:22px; width:40px; height:40px; border-radius:50%;
+  background:radial-gradient(circle, #FFF6D9, var(--butter) 65%, transparent 75%); opacity:0.85; }
+.g-cloud-wrap{ position:absolute; width:78px; opacity:0.55; animation:gdrift linear infinite; }
+.g-cloud-wrap svg{ width:100%; height:auto; display:block; }
+@keyframes gdrift{ from{ transform:translateX(-60px);} to{ transform:translateX(420px);} }
+.g-hill-back{ position:absolute; bottom:60px; left:-10%; width:120%; height:70px; background:var(--hill-back); opacity:0.55; border-radius:50% 50% 0 0/100% 100% 0 0; }
+
+/* trees — bigger, gradient-filled SVGs matching the butterfly art style */
+.g-tree{ position:absolute; bottom:56px; cursor:pointer; z-index:2; }
+.g-tree .tree-svg{ width:100%; height:100%; display:block; overflow:visible; }
+.tree-canopy{ transform-origin:50% 55%; animation-name:sway; animation-timing-function:ease-in-out; animation-iteration-count:infinite; }
+@keyframes sway{ 0%,100%{ transform:rotate(-2.4deg);} 50%{ transform:rotate(2.4deg);} }
+
+.g-bush{ position:absolute; bottom:52px; width:64px; height:42px; background:var(--leaf);
+  border-radius:50% 50% 40% 40%; transform-origin:bottom center; animation-name:sway; animation-timing-function:ease-in-out; animation-iteration-count:infinite;
+  box-shadow:-12px 8px 0 -8px var(--leaf-dark) inset; z-index:2; }
+
 .g-empty{ text-align:center; padding:60px 20px; color:var(--ink-soft); position:relative; z-index:3; }
 
-/* singing birds: little music notes that pop above the canopy on a loop */
-.g-note{ position:absolute; font-size:12px; opacity:0; pointer-events:none; animation:noteFloat 3.4s ease-in infinite; }
+/* grass — many individually-swaying blades along the bottom */
+.g-grass{ position:absolute; left:0; right:0; bottom:0; height:70px; z-index:4; overflow:visible; pointer-events:none; }
+.grass-svg{ width:100%; height:100%; display:block; }
+.blade{ animation-name:bladeSway; animation-timing-function:ease-in-out; animation-iteration-count:infinite; }
+@keyframes bladeSway{ 0%,100%{ transform:rotate(-6deg);} 50%{ transform:rotate(6deg);} }
+
+/* singing birds: little music notes that pop up on a loop / on click */
+.g-note{ position:absolute; font-size:13px; opacity:0; pointer-events:none; animation:noteFloat 3.2s ease-in infinite; color:var(--ink); }
 @keyframes noteFloat{
   0%{ opacity:0; transform:translateY(0) translateX(0) scale(0.8); }
   15%{ opacity:0.9; }
   100%{ opacity:0; transform:translateY(-34px) translateX(8px) scale(1.1); }
 }
 
-/* bees drifting between flowers, land briefly on them */
-.g-bee{ position:absolute; font-size:14px; z-index:5; pointer-events:none; }
+/* real birds — perch in the trees, fly between them, and preen/sing on click */
+.g-realbird{ position:absolute; width:42px; z-index:6; cursor:pointer; transform-origin:50% 85%; }
+.g-realbird svg{ width:100%; height:auto; display:block; overflow:visible; }
+.g-realbird.perched .bird-wing{ transform-origin:22px 17px; animation:birdIdle 3.4s ease-in-out infinite; }
+.g-realbird.flying .bird-wing{ transform-origin:22px 17px; animation:birdFlap 0.26s ease-in-out infinite alternate; }
+.g-realbird.flying{ animation:birdBob 0.5s ease-in-out infinite alternate; }
+.g-realbird.preening{ animation:birdPreen 0.5s ease-in-out infinite alternate; }
+.g-realbird.preening .bird-wing{ animation:birdFlap 0.35s ease-in-out infinite alternate; }
+@keyframes birdIdle{ 0%,86%,100%{ transform:scaleX(1); } 92%{ transform:scaleX(0.85); } }
+@keyframes birdFlap{ from{ transform:scaleX(1) scaleY(1); } to{ transform:scaleX(0.62) scaleY(0.92); } }
+@keyframes birdBob{ from{ transform:translateY(0); } to{ transform:translateY(-3px); } }
+@keyframes birdPreen{ from{ transform:rotate(-5deg); } to{ transform:rotate(6deg); } }
+
+/* real bees — drift in from an edge, wander briefly, drift back out */
+.g-realbee{ position:absolute; left:0; top:0; width:30px; z-index:5; pointer-events:none; }
+.g-realbee svg{ width:100%; height:auto; display:block; overflow:visible; }
+.bee-wing{ animation:beeFlap 0.16s ease-in-out infinite alternate; }
+.bee-wing-r{ animation-delay:0.02s; }
+@keyframes beeFlap{ from{ transform:scaleY(1); } to{ transform:scaleY(0.55); } }
 
 /* perched butterflies (garden only) — they sit on a flower/tree until clicked away */
 .g-perch-butterfly{ position:absolute; width:30px; height:22px; z-index:6; pointer-events:none; }
@@ -288,17 +310,17 @@ label.field-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.07
 @keyframes perchFlap{ from{ transform:scaleX(1); } to{ transform:scaleX(0.7); } }
 
 .flower-bed{
-  position:absolute; left:0; right:0; bottom:36px; height:96px;
-  display:flex; align-items:flex-end; gap:18px; padding:0 16px;
+  position:absolute; left:0; right:0; bottom:44px; height:132px;
+  display:flex; align-items:flex-end; gap:22px; padding:0 16px;
   overflow-x:auto; overflow-y:hidden; z-index:3;
 }
 .flower-bed::-webkit-scrollbar{ height:5px; }
 .flower-bed::-webkit-scrollbar-thumb{ background:rgba(90,75,62,0.25); border-radius:4px; }
-.planted{ flex:0 0 auto; width:52px; text-align:center; cursor:pointer; transform-origin:bottom center;
+.planted{ flex:0 0 auto; width:70px; text-align:center; cursor:pointer; transform-origin:bottom center;
   animation:sway ease-in-out infinite; position:relative; }
-.planted .p-stem{ width:3px; height:26px; background:var(--leaf-dark); margin:0 auto; border-radius:2px; }
-.planted .p-flower-img{ width:44px; height:44px; object-fit:contain; margin-bottom:-4px; }
-.planted .p-flower-fallback{ font-size:24px; margin-bottom:-6px; }
+.planted .p-stem{ width:4px; height:36px; background:var(--leaf-dark); margin:0 auto; border-radius:2px; }
+.planted .p-flower-img{ width:60px; height:60px; object-fit:contain; margin-bottom:-4px; }
+.planted .p-flower-fallback{ font-size:32px; margin-bottom:-6px; }
 .planted .p-label{ font-size:9px; color:var(--ink-soft); opacity:0; transition:opacity .15s ease; white-space:nowrap; }
 .planted:hover .p-label{ opacity:1; }
 
@@ -329,5 +351,6 @@ label.field-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.07
 @keyframes flap{ from{ transform:scaleX(1); } to{ transform:scaleX(0.55); } }
 
 @media (prefers-reduced-motion: reduce){
-  .g-cloud, .g-bird, .g-tree .canopy, .g-bush, .planted, .bfly-wing, .g-figure, .vase-stack, .vs-tree::after, .vs-bush, .g-note{ animation:none !important; }
+  .g-cloud-wrap, .tree-canopy, .g-bush, .planted, .bfly-wing, .bird-wing, .bee-wing, .blade,
+  .g-realbird.flying, .g-realbird.preening, .vase-stack, .vs-tree::after, .vs-bush, .g-note{ animation:none !important; }
 }

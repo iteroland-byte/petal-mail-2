@@ -329,6 +329,278 @@ function initDriftingButterflies(){
 }
 
 /* ============================================================
+   Garden-scene illustrations — trees, birds, bees, grass, clouds.
+   Drawn as gradient-filled SVGs with thin ink strokes, matching the
+   butterflySvg() look above, rather than emoji.
+   ============================================================ */
+
+const TREE_PALETTE = [
+  { trunkLight:'#B08A5D', trunkDark:'#8B6239', leafLight:'#BCE8A0', leafDark:'#5E9A57', leafHi:'#E6F6D6' },
+  { trunkLight:'#A9835A', trunkDark:'#7E5934', leafLight:'#A6E0C9', leafDark:'#4E9C82', leafHi:'#DCF5EB' },
+  { trunkLight:'#B4936B', trunkDark:'#8B6A44', leafLight:'#CDE9A0', leafDark:'#7DAE4E', leafHi:'#EEF7D8' },
+];
+
+function treeSvg(pal, swayDur, swayDelay){
+  const uid = 'tr' + (uidSeq++);
+  return `<svg viewBox="0 0 160 210" class="tree-svg" overflow="visible">
+    <defs>
+      <linearGradient id="${uid}t" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${pal.trunkLight}"/>
+        <stop offset="100%" stop-color="${pal.trunkDark}"/>
+      </linearGradient>
+      <radialGradient id="${uid}c" cx="35%" cy="28%" r="78%">
+        <stop offset="0%" stop-color="${pal.leafLight}"/>
+        <stop offset="100%" stop-color="${pal.leafDark}"/>
+      </radialGradient>
+    </defs>
+    <path d="M75,210 C72,172 68,142 77,112 C79,102 83,102 85,112 C93,142 89,172 87,210 Z"
+      fill="url(#${uid}t)" stroke="var(--ink)" stroke-width="1" stroke-opacity="0.22"/>
+    <g class="tree-canopy" style="transform-origin:80px 120px; animation-duration:${swayDur}s; animation-delay:${swayDelay}s;">
+      <path d="M80,18 C40,18 16,54 23,88 C8,97 6,126 30,134 C23,153 46,171 75,160 C89,171 119,166 127,143 C152,139 154,105 129,91 C138,58 109,26 80,18 Z"
+        fill="url(#${uid}c)" stroke="var(--ink)" stroke-width="1.1" stroke-opacity="0.26"/>
+      <path d="M40,70 C36,50 52,32 74,28" stroke="var(--ink)" stroke-width="0.8" fill="none" opacity="0.16"/>
+      <path d="M108,60 C119,78 112,101 96,111" stroke="var(--ink)" stroke-width="0.8" fill="none" opacity="0.16"/>
+      <ellipse cx="56" cy="58" rx="22" ry="15" fill="${pal.leafHi}" opacity="0.32"/>
+    </g>
+  </svg>`;
+}
+
+function cloudSvg(){
+  const uid = 'cl' + (uidSeq++);
+  return `<svg viewBox="0 0 120 46" class="cloud-svg" overflow="visible">
+    <defs><radialGradient id="${uid}" cx="35%" cy="28%" r="80%">
+      <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#E9F4E1"/>
+    </radialGradient></defs>
+    <path d="M18,36 C4,36 2,18 16,14 C18,4 38,2 44,12 C56,4 78,8 78,20 C96,18 104,36 88,36 Z"
+      fill="url(#${uid})" stroke="var(--ink)" stroke-width="0.6" stroke-opacity="0.1"/>
+  </svg>`;
+}
+
+const BIRD_PALETTE = [
+  { light:'#F6C89E', main:'#E8895D', wing:'#C96A3E', belly:'#FBEFDD', beak:'#E4A73B' },
+  { light:'#C9DDF3', main:'#7CA6D8', wing:'#4E7FB8', belly:'#F3F8FF', beak:'#E4A73B' },
+  { light:'#D7EFC9', main:'#8FC17B', wing:'#5E9A57', belly:'#FDF8E8', beak:'#E4A73B' },
+];
+
+function birdSvg(c){
+  const uid = 'bd' + (uidSeq++);
+  return `<svg viewBox="0 0 46 36" overflow="visible">
+    <defs><linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${c.light}"/><stop offset="100%" stop-color="${c.main}"/>
+    </linearGradient></defs>
+    <path d="M8,20 L0,14 L0,27 Z" fill="${c.main}" stroke="var(--ink)" stroke-width="0.5" stroke-opacity="0.28"/>
+    <ellipse cx="22" cy="21" rx="15" ry="10.5" fill="url(#${uid})" stroke="var(--ink)" stroke-width="0.7" stroke-opacity="0.3"/>
+    <ellipse cx="23" cy="26" rx="9" ry="4.5" fill="${c.belly}" opacity="0.9"/>
+    <circle cx="35" cy="13" r="7.6" fill="url(#${uid})" stroke="var(--ink)" stroke-width="0.7" stroke-opacity="0.3"/>
+    <path d="M41,13 L46,11.4 L41,16.2 Z" fill="${c.beak}"/>
+    <circle cx="37" cy="11" r="1.25" fill="var(--ink)"/>
+    <g class="bird-wing" style="transform-origin:22px 17px;">
+      <path d="M24,17 C15,8 3,10 1,19 C-1,26 11,30 22,25 C27,23 27,19.5 24,17 Z"
+        fill="${c.wing}" stroke="var(--ink)" stroke-width="0.6" stroke-opacity="0.3"/>
+    </g>
+    <path d="M18,31 L18,35 M27,31 L27,35" stroke="var(--ink)" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+  </svg>`;
+}
+
+function beeSvg(){
+  const uid = 'be' + (uidSeq++);
+  return `<svg viewBox="0 0 34 24" overflow="visible">
+    <defs><linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FBE07A"/><stop offset="100%" stop-color="#E8A93B"/>
+    </linearGradient></defs>
+    <g class="bee-wing bee-wing-l" style="transform-origin:15px 9px;">
+      <ellipse cx="9" cy="5" rx="8" ry="4.6" fill="#F3FBFF" opacity="0.6" stroke="var(--ink)" stroke-width="0.4" stroke-opacity="0.22"/>
+    </g>
+    <g class="bee-wing bee-wing-r" style="transform-origin:19px 9px;">
+      <ellipse cx="25" cy="5" rx="8" ry="4.6" fill="#F3FBFF" opacity="0.6" stroke="var(--ink)" stroke-width="0.4" stroke-opacity="0.22"/>
+    </g>
+    <ellipse cx="17" cy="14" rx="11" ry="7.6" fill="url(#${uid})" stroke="var(--ink)" stroke-width="0.6" stroke-opacity="0.32"/>
+    <path d="M8,10 L9.5,18 M13,9 L15,19 M19,9 L21,19 M24,10 L25,17"
+      stroke="var(--ink)" stroke-width="2.1" stroke-linecap="round" opacity="0.78"/>
+    <circle cx="6.5" cy="12" r="3.4" fill="url(#${uid})" stroke="var(--ink)" stroke-width="0.6" stroke-opacity="0.32"/>
+    <path d="M4,9 C2,6 1,6 0.5,4" stroke="var(--ink)" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function buildGrassSvg(){
+  const total = 90;
+  let blades = '';
+  for(let i=0;i<total;i++){
+    const x = (i/(total-1))*1000 + rand(-4,4);
+    const h = rand(38,80);
+    const w = rand(5,9);
+    const tilt = rand(-6,6);
+    const dark = Math.random() < 0.5;
+    const dur = rand(2.6,4.2).toFixed(2);
+    const delay = (-rand(0,4)).toFixed(2);
+    blades += `<g class="blade" style="transform-origin:${x.toFixed(1)}px 90px; animation-duration:${dur}s; animation-delay:${delay}s;">
+      <path d="M${x.toFixed(1)},90 C${(x-w).toFixed(1)},${(90-h*0.5).toFixed(1)} ${(x+tilt).toFixed(1)},${(90-h*0.85).toFixed(1)} ${(x+tilt*1.4).toFixed(1)},${(90-h).toFixed(1)} C${(x+tilt*0.6).toFixed(1)},${(90-h*0.6).toFixed(1)} ${(x+w).toFixed(1)},${(90-h*0.3).toFixed(1)} ${x.toFixed(1)},90 Z"
+        fill="${dark ? 'var(--leaf-dark)' : 'var(--leaf)'}" opacity="${dark ? 0.92 : 0.85}"/>
+    </g>`;
+  }
+  return `<svg class="grass-svg" viewBox="0 0 1000 90" preserveAspectRatio="none" overflow="visible">${blades}</svg>`;
+}
+
+/* trees a bird can call home — perch points are percentages of the
+   garden-scene box, so they track the trees at any viewport width */
+const TREE_DEFS = [
+  { leftPct: 3,  widthPx: 148, heightPx: 202, palette: 0,
+    perches: [ {left:'12%', top:'20%'}, {left:'20%', top:'33%'} ] },
+  { leftPct: 63, widthPx: 126, heightPx: 174, palette: 1,
+    perches: [ {left:'75%', top:'17%'}, {left:'84%', top:'30%'} ] },
+];
+const TREE_DEFS_FLAT = [];
+TREE_DEFS.forEach((t,i)=> t.perches.forEach(p=> TREE_DEFS_FLAT.push({ treeIdx:i, ...p })));
+
+class Bird{
+  constructor(scene, startPerch, idOffset){
+    this.scene = scene;
+    this.color = BIRD_PALETTE[idOffset % BIRD_PALETTE.length];
+    this.el = document.createElement('div');
+    this.el.className = 'g-realbird perched';
+    this.el.innerHTML = birdSvg(this.color);
+    scene.appendChild(this.el);
+    this.perch = startPerch;
+    this.facing = 1;
+    this.applyPerch();
+    this.el.addEventListener('click', (e)=>{ e.stopPropagation(); this.onClick(); });
+    this.flightTimer = setTimeout(()=>this.tryFly(), rand(7000,16000));
+    this.singTimer = setTimeout(()=>this.idleSingLoop(), rand(3000,7000));
+  }
+  applyPerch(){
+    this.el.style.left = this.perch.left;
+    this.el.style.top = this.perch.top;
+    this.el.style.transform = `scaleX(${this.facing})`;
+  }
+  idleSingLoop(){
+    if(!this.el.classList.contains('flying') && Math.random() < 0.7) this.sing(false);
+    this.singTimer = setTimeout(()=>this.idleSingLoop(), rand(5000,10000));
+  }
+  tryFly(){
+    const options = TREE_DEFS_FLAT.filter(p => p.left !== this.perch.left || p.top !== this.perch.top);
+    const next = options[Math.floor(Math.random()*options.length)];
+    this.flyTo(next);
+  }
+  flyTo(target){
+    this.el.classList.remove('perched');
+    this.el.classList.add('flying');
+    const curX = parseFloat(this.perch.left), tgtX = parseFloat(target.left);
+    this.facing = tgtX >= curX ? 1 : -1;
+    this.el.style.transition = 'left 2.3s cubic-bezier(.4,0,.3,1), top 2.3s cubic-bezier(.4,0,.3,1)';
+    this.el.style.transform = `scaleX(${this.facing})`;
+    requestAnimationFrame(()=>{
+      this.el.style.left = target.left;
+      this.el.style.top = target.top;
+    });
+    clearTimeout(this._landTimer);
+    this._landTimer = setTimeout(()=>{
+      this.perch = target;
+      this.el.classList.remove('flying');
+      this.el.classList.add('perched');
+      this.el.style.transition = '';
+      this.flightTimer = setTimeout(()=>this.tryFly(), rand(8000,18000));
+    }, 2350);
+  }
+  onClick(){
+    if(this.el.classList.contains('flying')) return;
+    this.el.classList.add('preening');
+    this.sing(true);
+    setTimeout(()=>this.el.classList.remove('preening'), 1100);
+  }
+  sing(loud){
+    this.el.classList.add('singing');
+    const n = loud ? 3 : 1;
+    for(let i=0;i<n;i++){
+      setTimeout(()=>{
+        const note = document.createElement('div');
+        note.className = 'g-note';
+        note.textContent = ['♪','♫','♪'][Math.floor(Math.random()*3)];
+        note.style.left = rand(6,30) + 'px';
+        note.style.top = '-4px';
+        this.el.appendChild(note);
+        setTimeout(()=>note.remove(), 3200);
+      }, i*240);
+    }
+    setTimeout(()=>this.el.classList.remove('singing'), 900);
+  }
+}
+
+function spawnBirds(scene){
+  const slots = TREE_DEFS_FLAT.slice();
+  for(let i=slots.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [slots[i],slots[j]] = [slots[j],slots[i]];
+  }
+  const count = Math.min(3, slots.length);
+  for(let i=0;i<count;i++) new Bird(scene, slots[i], i);
+}
+
+class Bee{
+  constructor(scene, onDone){
+    this.scene = scene;
+    this.onDone = onDone;
+    this.el = document.createElement('div');
+    this.el.className = 'g-realbee';
+    this.el.innerHTML = beeSvg();
+    scene.appendChild(this.el);
+    const w = scene.clientWidth || 320, h = scene.clientHeight || 420;
+    const edge = Math.floor(Math.random()*3);
+    if(edge===0){ this.x=-30; this.y=rand(h*0.35,h*0.78); }
+    else if(edge===1){ this.x=w+30; this.y=rand(h*0.35,h*0.78); }
+    else { this.x=rand(0,w); this.y=-20; }
+    this.vx=0; this.vy=0;
+    this.age=0;
+    this.life=rand(220,380);
+    this.leaving=false;
+    this.pickTarget(w,h);
+    this.update = this.update.bind(this);
+    this._raf = requestAnimationFrame(this.update);
+  }
+  pickTarget(w,h){
+    this.tx = rand(w*0.15, w*0.85);
+    this.ty = rand(h*0.42, h*0.8);
+  }
+  update(){
+    const w = this.scene.clientWidth || 320, h = this.scene.clientHeight || 420;
+    this.age++;
+    if(this.age > this.life && !this.leaving){
+      this.leaving = true;
+      const edge = Math.floor(Math.random()*3);
+      if(edge===0) this.tx = -40; else if(edge===1) this.tx = w+40; else this.ty = -30;
+    }
+    const dx=this.tx-this.x, dy=this.ty-this.y, d=Math.hypot(dx,dy)||1;
+    this.vx += (dx/d)*0.03; this.vy += (dy/d)*0.03;
+    const sp = Math.hypot(this.vx,this.vy), max = this.leaving ? 1.1 : 0.65;
+    if(sp>max){ this.vx = this.vx/sp*max; this.vy = this.vy/sp*max; }
+    this.vx *= 0.95; this.vy *= 0.95;
+    this.x += this.vx; this.y += this.vy;
+    const wob = Math.sin(Date.now()/150 + this.x)*3;
+    const facing = this.vx < -0.02 ? -1 : 1;
+    this.el.style.transform = `translate(${this.x.toFixed(1)}px, ${(this.y+wob).toFixed(1)}px) scaleX(${facing})`;
+    if(!this.leaving && d<14 && Math.random()<0.02) this.pickTarget(w,h);
+    if(this.leaving && (this.x < -50 || this.x > w+50 || this.y < -50)){
+      this.el.remove();
+      cancelAnimationFrame(this._raf);
+      if(this.onDone) this.onDone();
+      return;
+    }
+    this._raf = requestAnimationFrame(this.update);
+  }
+}
+
+function spawnBees(scene){
+  const BEE_MAX = 2;
+  let active = 0;
+  function launch(){
+    if(active >= BEE_MAX){ setTimeout(launch, rand(2000,4000)); return; }
+    active++;
+    new Bee(scene, ()=>{ active--; setTimeout(launch, rand(2500,6000)); });
+    setTimeout(launch, rand(3500,7000));
+  }
+  launch();
+}
+
+/* ============================================================
    Page fade-in + init dispatch
    ============================================================ */
 function fadeInPage(){
@@ -673,8 +945,8 @@ async function initGarden(){
   who.textContent = '@' + handle;
   notifLink.href = 'notifications.html?handle=' + encodeURIComponent(handle);
 
-  startAmbientBirdsong(scene);
-  startBees(scene);
+  spawnBirds(scene);
+  spawnBees(scene);
 
   let list = [];
   try{
@@ -702,95 +974,39 @@ async function initGarden(){
 }
 
 function buildGardenSceneShell(scene){
+  const treesHtml = TREE_DEFS.map((t,i)=>{
+    const dur = (4.5 + i*0.7).toFixed(1);
+    const delay = (-rand(0,3)).toFixed(1);
+    return `<div class="g-tree" id="tree${i}" style="left:${t.leftPct}%; width:${t.widthPx}px; height:${t.heightPx}px;">
+      ${treeSvg(TREE_PALETTE[t.palette], dur, delay)}
+    </div>`;
+  }).join('');
+
   scene.innerHTML = `
     <div class="g-sun"></div>
-    <div class="g-cloud" style="left:8%; top:18px; animation-duration:52s; animation-delay:-6s;"></div>
-    <div class="g-cloud" style="left:50%; top:34px; animation-duration:64s; animation-delay:-24s;"></div>
-    <div class="g-bird" style="top:16%; animation-duration:18s; animation-delay:-3s;">🕊️</div>
-    <div class="g-bird" style="top:26%; animation-duration:24s; animation-delay:-11s;">🐦</div>
+    <div class="g-cloud-wrap" style="left:8%; top:5%; animation-duration:84s; animation-delay:-10s;">${cloudSvg()}</div>
+    <div class="g-cloud-wrap" style="left:56%; top:2%; animation-duration:98s; animation-delay:-42s;">${cloudSvg()}</div>
     <div class="g-hill-back"></div>
-    <div class="g-tree" id="tree1" style="left:5%;"><div class="canopy" style="animation-duration:4.4s; animation-delay:-1.1s;"></div><div class="trunk"></div></div>
-    <div class="g-tree" id="tree2" style="left:78%;"><div class="canopy" style="animation-duration:3.8s; animation-delay:-2.4s;"></div><div class="trunk"></div></div>
-    <div class="g-bush" style="left:20%; animation-duration:3.4s; animation-delay:-0.6s;"></div>
-    <div class="g-bush" style="left:60%; animation-duration:3.9s; animation-delay:-1.8s;"></div>
-    <div class="g-bush" style="left:90%; animation-duration:3.1s; animation-delay:-2.1s;"></div>
-    <div class="g-path"></div>
-    <div class="g-figure" style="animation-duration:34s; animation-delay:-4s;">🚶🏿</div>
-    <div class="g-figure" style="animation-duration:21s; animation-delay:-13s;">🚴🏾</div>
-    <div class="g-figure" style="animation-duration:15s; animation-delay:-2s;">🚗</div>
-    <div class="g-figure" style="animation-duration:27s; animation-delay:-19s;">🚶🏾‍♀️</div>
+    ${treesHtml}
+    <div class="g-bush" style="left:26%; animation-duration:${(3.4+Math.random()).toFixed(1)}s; animation-delay:${(-Math.random()*2).toFixed(1)}s;"></div>
+    <div class="g-bush" style="left:64%; animation-duration:${(3.6+Math.random()).toFixed(1)}s; animation-delay:${(-Math.random()*2).toFixed(1)}s;"></div>
+    <div class="g-bush" style="left:92%; animation-duration:${(3.1+Math.random()).toFixed(1)}s; animation-delay:${(-Math.random()*2).toFixed(1)}s;"></div>
+    <div class="g-grass" id="gGrass"></div>
     <div class="flower-bed" id="flowerBed"></div>
     <div class="g-empty" id="gardenEmptyState" style="display:none;">Enter a handle from "My garden" on the home page to see a garden.</div>
   `;
-  // trees perch a small singing bird each, and can also be clicked to make
-  // a butterfly land in the canopy
-  ['tree1','tree2'].forEach(id=>{
-    const tree = document.getElementById(id);
-    const perchedBird = document.createElement('div');
-    perchedBird.textContent = '🐦';
-    perchedBird.style.cssText = 'position:absolute; top:-6px; left:60%; font-size:13px;';
-    tree.querySelector('.canopy').appendChild(perchedBird);
-    tree.onclick = () => perchButterflyOn(tree, tree.closest('.garden-scene'));
+  document.getElementById('gGrass').innerHTML = buildGrassSvg();
+
+  // trees can be clicked to make a butterfly land in the canopy — birds
+  // are their own elements (see spawnBirds) so a click on a bird itself
+  // doesn't also trigger this.
+  TREE_DEFS.forEach((t,i)=>{
+    const tree = document.getElementById('tree'+i);
+    tree.onclick = (e) => {
+      if(e.target.closest('.g-realbird')) return;
+      perchButterflyOn(tree, scene);
+    };
   });
-}
-
-function startAmbientBirdsong(scene){
-  setInterval(()=>{
-    document.querySelectorAll('#tree1, #tree2').forEach(tree=>{
-      if(Math.random() < 0.6){
-        const note = document.createElement('div');
-        note.className = 'g-note';
-        note.textContent = ['♪','♫','♪'][Math.floor(Math.random()*3)];
-        note.style.left = (30 + Math.random()*20) + 'px';
-        note.style.top = '4px';
-        tree.querySelector('.canopy').appendChild(note);
-        setTimeout(()=>note.remove(), 3500);
-      }
-    });
-  }, 2200);
-}
-
-function startBees(scene){
-  const COUNT = 3;
-  const bees = [];
-  class Bee{
-    constructor(){
-      this.el = document.createElement('div');
-      this.el.className = 'g-bee';
-      this.el.textContent = '🐝';
-      scene.appendChild(this.el);
-      this.x = rand(20, scene.clientWidth-20 || 300);
-      this.y = rand(120, 240);
-      this.vx = 0; this.vy = 0;
-      this.restTimer = 0;
-      this.pickTarget();
-    }
-    pickTarget(){
-      const w = scene.clientWidth || 320;
-      this.tx = rand(20, w-20);
-      this.ty = rand(130, 250);
-      this.restTimer = rand(60,180);
-    }
-    update(){
-      if(this.resting){
-        this.restTimer--;
-        if(this.restTimer<=0){ this.resting = false; this.pickTarget(); }
-        return;
-      }
-      const dx=this.tx-this.x, dy=this.ty-this.y, d=Math.hypot(dx,dy)||1;
-      this.vx += (dx/d)*0.02; this.vy += (dy/d)*0.02;
-      const sp = Math.hypot(this.vx,this.vy);
-      const max = 0.7;
-      if(sp>max){ this.vx=this.vx/sp*max; this.vy=this.vy/sp*max; }
-      this.vx*=0.94; this.vy*=0.94;
-      this.x+=this.vx; this.y+=this.vy;
-      if(d<12){ this.resting = true; this.restTimer = rand(90,240); }
-      const wobble = Math.sin(Date.now()/220 + this.x)*3;
-      this.el.style.transform = `translate(${this.x}px, ${this.y+wobble}px)`;
-    }
-  }
-  for(let i=0;i<COUNT;i++) bees.push(new Bee());
-  (function loop(){ bees.forEach(b=>b.update()); requestAnimationFrame(loop); })();
 }
 
 function showNotePopup(item, f){
