@@ -467,6 +467,8 @@ async function initVase(){
   const dayDots = document.getElementById('dayDots');
   const waterBtn = document.getElementById('waterBtn');
   const countdownEl = document.getElementById('waitCountdown');
+  const demoControls = document.getElementById('demoControls');
+  const skipDayBtn = document.getElementById('skipDayBtn');
   const vaseTitle = document.getElementById('vaseTitle');
   const vaseFrom = document.getElementById('vaseFrom');
   const vaseWho = document.getElementById('vaseWho');
@@ -517,13 +519,16 @@ async function initVase(){
     if(finished){
       waterBtn.disabled = true; waterBtn.textContent = 'fully bloomed 🌸';
       countdownEl.textContent = '';
+      demoControls.style.display = 'none';
     } else if(!canWater){
       waterBtn.disabled = true;
       waterBtn.textContent = 'watered — check back soon';
       tickCountdown();
+      demoControls.style.display = '';
     } else {
       waterBtn.disabled = false; waterBtn.textContent = 'water it 💧';
       countdownEl.textContent = '';
+      demoControls.style.display = 'none';
     }
     vaseTitle.textContent = finished ? 'Ready to bloom' : 'Day ' + Math.min(gift.waterings.length+1, gift.daysNeeded) + ' of ' + gift.daysNeeded;
   }
@@ -569,6 +574,17 @@ async function initVase(){
     } else {
       render();
     }
+  };
+
+  // demo-only: rewinds the last watering's timestamp by a full cooldown
+  // so the 24h wait clears instantly, without touching waterings.length
+  // (the count — and therefore the day/stage — is untouched).
+  skipDayBtn.onclick = async () => {
+    if(gift.waterings.length === 0) return;
+    clearInterval(countdownTimer);
+    gift.waterings[gift.waterings.length-1] -= WATER_COOLDOWN_MS;
+    await saveGift(gift);
+    render();
   };
 
   render();
