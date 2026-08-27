@@ -324,7 +324,6 @@ function buildWorld(){
 
   world.innerHTML = html;
 
-  initDriftingButterflies();
 
 }
 
@@ -346,7 +345,7 @@ function installGardenGraphicStyle(){
   if(gardenStyleInstalled) return; gardenStyleInstalled=true;
   const style=document.createElement('style');
   style.textContent=`
-    .butterfly,.g-driftbutterfly,.g-perch-butterfly{width:clamp(30px,4.8vw,68px)!important;height:auto!important;aspect-ratio:1.34/1;transform-origin:50% 45%!important;z-index:30}
+    .butterfly,.g-driftbutterfly,.g-perch-butterfly{width:clamp(30px,4.8vw,68px)!important;height:auto!important;aspect-ratio:1.34/1;transform-origin:50% 45%!important;z-index:30;pointer-events:none}
     .butterfly img,.g-driftbutterfly img,.g-perch-butterfly img{display:block;width:100%;height:100%;object-fit:contain;transform-origin:50% 12%;filter:drop-shadow(0 2px 2px rgba(42,58,38,.16))}
     .butterfly img,.g-driftbutterfly img{animation:gardenButterflyWings .34s ease-in-out infinite alternate}
     .g-perch-butterfly img{animation:gardenButterflyPerched 1.8s ease-in-out infinite}
@@ -608,9 +607,9 @@ class Bird{
 
     let tx,ty,maxSpeed;
 
-    if(this.state==='leaving'){ tx=this.exitX; ty=this.exitY; maxSpeed=1.0; }
+    if(this.state==='leaving'){ tx=this.exitX; ty=this.exitY; maxSpeed=1.15; }
 
-    else { const p=this.targetPos(); tx=p.x; ty=p.y; maxSpeed=0.72; }
+    else { const p=this.targetPos(); tx=p.x; ty=p.y; maxSpeed=0.82; }
 
     const dx=tx-this.x, dy=ty-this.y, d=Math.hypot(dx,dy)||1;
 
@@ -994,9 +993,9 @@ class GardenButterfly{
 
     let tx,ty,maxSpeed;
 
-    if(this.state==='leaving'){ tx=this.exitX; ty=this.exitY; maxSpeed=1.0; }
+    if(this.state==='leaving'){ tx=this.exitX; ty=this.exitY; maxSpeed=1.15; }
 
-    else { tx=this.tx; ty=this.ty; maxSpeed=0.66; }
+    else { tx=this.tx; ty=this.ty; maxSpeed=0.74; }
 
     const dx=tx-this.x, dy=ty-this.y, d=Math.hypot(dx,dy)||1;
 
@@ -1112,6 +1111,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if(page !== 'garden') buildWorld();
 
+  // Site-wide butterflies: they enter from outside the viewport and leave again.
+  initDriftingButterflies();
+
   fadeInPage();
 
   const init = PAGE_INIT[page];
@@ -1216,7 +1218,7 @@ function initSend(){
 
       await saveGift(gift);
 
-      const link = location.origin + location.pathname.replace(/send**\\.**html$/, '') + 'receive.html?gift=' + giftId;
+      const link = location.origin + location.pathname.replace(/send\.html$/, '') + 'receive.html?gift=' + giftId;
 
       const box = document.getElementById('linkBox');
 
