@@ -10,13 +10,13 @@
 
    ============================================================ */
 
-import { initializeApp } from "[https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js](https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js)";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
 
   getFirestore, doc, getDoc, setDoc
 
-} from "[https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js](https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js)";
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
 
@@ -467,7 +467,7 @@ function getAudioCtx(){
 
   if(!_audioCtx){
 
-    try{ _audioCtx = new (window\.AudioContext||window\.webkitAudioContext)(); }
+    try{ _audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }
 
     catch(e){ _audioCtx = null; }
 
