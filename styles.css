@@ -243,24 +243,28 @@ label.field-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.07
 .bloom-note{ margin-top:24px; max-width:400px; background:var(--card); border:2px solid var(--line); border-radius:16px; padding:18px; font-style:italic; }
 .bloom-from{ margin-top:10px; font-size:12px; color:var(--ink-soft); }
 
-/* ---------- GARDEN SCENE (illustrated, no drifting overlay butterflies here — they perch instead) ----------
-   Sky elements (sun/clouds) are kept small and subtle on purpose — the
-   trees, grass and flower bed are the focus, not the sky. */
+/* ---------- GARDEN SCENE (illustrated; drifting birds, bees and
+   butterflies come and go here instead of the shared page overlay) ----------
+   Blue open sky with a big sun and clouds up top; big trees rooted right
+   at the horizon line where the sky meets the grass, like a real backyard. */
 .garden-scene{
-  position:relative; height:460px; overflow:hidden; border-radius:0 0 26px 26px;
-  background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 40%, var(--hill-front) 41%, var(--hill-dark) 100%);
+  position:relative; height:600px; overflow:hidden; border-radius:0 0 26px 26px;
+  background:linear-gradient(180deg, #6FC3EA 0%, #CFEFFB 46%, var(--hill-front) 47%, var(--hill-dark) 100%);
 }
-.g-sun{ position:absolute; top:10px; right:22px; width:40px; height:40px; border-radius:50%;
-  background:radial-gradient(circle, #FFF6D9, var(--butter) 65%, transparent 75%); opacity:0.85; }
-.g-cloud-wrap{ position:absolute; width:78px; opacity:0.55; animation:gdrift linear infinite; }
+.g-sun{ position:absolute; top:14px; right:26px; width:110px; height:110px; border-radius:50%;
+  background:radial-gradient(circle, #FFFBEA, #FFDE8A 55%, #FDCB5C 74%, transparent 82%); opacity:0.95; }
+.g-cloud-wrap{ position:absolute; width:150px; opacity:0.85; animation:gdrift linear infinite; }
 .g-cloud-wrap svg{ width:100%; height:auto; display:block; }
-@keyframes gdrift{ from{ transform:translateX(-60px);} to{ transform:translateX(420px);} }
-.g-hill-back{ position:absolute; bottom:60px; left:-10%; width:120%; height:70px; background:var(--hill-back); opacity:0.55; border-radius:50% 50% 0 0/100% 100% 0 0; }
+@keyframes gdrift{ from{ transform:translateX(-80px);} to{ transform:translateX(480px);} }
+.g-hill-back{ position:absolute; bottom:300px; left:-10%; width:120%; height:90px; background:var(--hill-back); opacity:0.5; border-radius:50% 50% 0 0/100% 100% 0 0; }
 
-/* trees — bigger, gradient-filled SVGs matching the butterfly art style */
-.g-tree{ position:absolute; bottom:56px; cursor:pointer; z-index:2; }
+/* trees — big, wide, branch-showing SVGs rooted right at the sky/ground
+   line so the canopy reads against the blue sky, matching the butterfly
+   art style (gradient fills + thin ink strokes). */
+.g-tree{ position:absolute; bottom:250px; cursor:pointer; z-index:2; }
 .g-tree .tree-svg{ width:100%; height:100%; display:block; overflow:visible; }
 .tree-canopy{ transform-origin:50% 55%; animation-name:sway; animation-timing-function:ease-in-out; animation-iteration-count:infinite; }
+.tree-branch{ transform-origin:center; }
 @keyframes sway{ 0%,100%{ transform:rotate(-2.4deg);} 50%{ transform:rotate(2.4deg);} }
 
 .g-bush{ position:absolute; bottom:52px; width:64px; height:42px; background:var(--leaf);
@@ -283,31 +287,44 @@ label.field-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.07
   100%{ opacity:0; transform:translateY(-34px) translateX(8px) scale(1.1); }
 }
 
-/* real birds — perch in the trees, fly between them, and preen/sing on click */
-.g-realbird{ position:absolute; width:42px; z-index:6; cursor:pointer; transform-origin:50% 85%; }
+/* real birds — drift in from the sides at the same gentle, gliding pace
+   as the bees, perch on a branch tip for a while, then either wing off
+   to another branch, drift back out of the page, or (on click) rustle
+   their feathers and burst into song. Position/bob is driven per-frame
+   from JS, so no CSS animation touches transform on the bird itself. */
+.g-realbird{ position:absolute; left:0; top:0; width:46px; z-index:6; cursor:pointer; will-change:transform; }
 .g-realbird svg{ width:100%; height:auto; display:block; overflow:visible; }
 .g-realbird.perched .bird-wing{ transform-origin:22px 17px; animation:birdIdle 3.4s ease-in-out infinite; }
-.g-realbird.flying .bird-wing{ transform-origin:22px 17px; animation:birdFlap 0.26s ease-in-out infinite alternate; }
-.g-realbird.flying{ animation:birdBob 0.5s ease-in-out infinite alternate; }
+.g-realbird.flying .bird-wing{ transform-origin:22px 17px; animation:birdFlap 0.16s ease-in-out infinite alternate; }
 .g-realbird.preening{ animation:birdPreen 0.5s ease-in-out infinite alternate; }
 .g-realbird.preening .bird-wing{ animation:birdFlap 0.35s ease-in-out infinite alternate; }
 @keyframes birdIdle{ 0%,86%,100%{ transform:scaleX(1); } 92%{ transform:scaleX(0.85); } }
 @keyframes birdFlap{ from{ transform:scaleX(1) scaleY(1); } to{ transform:scaleX(0.62) scaleY(0.92); } }
-@keyframes birdBob{ from{ transform:translateY(0); } to{ transform:translateY(-3px); } }
 @keyframes birdPreen{ from{ transform:rotate(-5deg); } to{ transform:rotate(6deg); } }
 
-/* real bees — drift in from an edge, wander briefly, drift back out */
-.g-realbee{ position:absolute; left:0; top:0; width:30px; z-index:5; pointer-events:none; }
+/* real bees — drift in from an edge, wander briefly, drift back out,
+   nose pointed the way they're actually flying */
+.g-realbee{ position:absolute; left:0; top:0; width:30px; z-index:5; pointer-events:none; will-change:transform; }
 .g-realbee svg{ width:100%; height:auto; display:block; overflow:visible; }
 .bee-wing{ animation:beeFlap 0.16s ease-in-out infinite alternate; }
 .bee-wing-r{ animation-delay:0.02s; }
 @keyframes beeFlap{ from{ transform:scaleY(1); } to{ transform:scaleY(0.55); } }
 
-/* perched butterflies (garden only) — they sit on a flower/tree until clicked away */
+/* perched butterfly (manual — lands on whichever flower/tree was just
+   clicked) */
 .g-perch-butterfly{ position:absolute; width:30px; height:22px; z-index:6; pointer-events:none; }
 .g-perch-butterfly svg{ width:100%; height:100%; overflow:visible; }
 .g-perch-butterfly .bfly-wing{ transform-origin:15px 11px; animation:perchFlap 2.6s ease-in-out infinite alternate; }
 @keyframes perchFlap{ from{ transform:scaleX(1); } to{ transform:scaleX(0.7); } }
+
+/* drifting garden butterflies — same slow, gliding bee-style pace; they
+   wander in from the side, land on a flower for a few seconds, then
+   move on or drift back out (or leave right away if clicked) */
+.g-driftbutterfly{ position:absolute; left:0; top:0; width:34px; height:24px; z-index:6; cursor:pointer; will-change:transform;
+  filter:drop-shadow(0 2px 2px rgba(90,75,62,0.15)); }
+.g-driftbutterfly svg{ width:100%; height:100%; overflow:visible; }
+.g-driftbutterfly .bfly-wing{ transform-origin:15px 11px; animation:flap 1.7s ease-in-out infinite alternate; }
+.g-driftbutterfly.perched .bfly-wing{ animation:perchFlap 2.6s ease-in-out infinite alternate; }
 
 .flower-bed{
   position:absolute; left:0; right:0; bottom:44px; height:132px;
@@ -352,5 +369,5 @@ label.field-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.07
 
 @media (prefers-reduced-motion: reduce){
   .g-cloud-wrap, .tree-canopy, .g-bush, .planted, .bfly-wing, .bird-wing, .bee-wing, .blade,
-  .g-realbird.flying, .g-realbird.preening, .vase-stack, .vs-tree::after, .vs-bush, .g-note{ animation:none !important; }
+  .g-realbird.flying, .g-realbird.preening, .g-driftbutterfly, .vase-stack, .vs-tree::after, .vs-bush, .g-note{ animation:none !important; }
 }

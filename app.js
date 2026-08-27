@@ -340,27 +340,38 @@ const TREE_PALETTE = [
   { trunkLight:'#B4936B', trunkDark:'#8B6A44', leafLight:'#CDE9A0', leafDark:'#7DAE4E', leafHi:'#EEF7D8' },
 ];
 
+/* Big, wide backyard tree: a tapered trunk plus four visible branches
+   that reach past the leaf clusters (so the bare branch tips show, like
+   real limbs) — those exposed tips double as bird perch points, see
+   TREE_PERCHES below. ViewBox is 220x300; keep any container this is
+   dropped into at that same aspect ratio. */
 function treeSvg(pal, swayDur, swayDelay){
   const uid = 'tr' + (uidSeq++);
-  return `<svg viewBox="0 0 160 210" class="tree-svg" overflow="visible">
+  return `<svg viewBox="0 0 220 300" class="tree-svg" overflow="visible">
     <defs>
       <linearGradient id="${uid}t" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="${pal.trunkLight}"/>
         <stop offset="100%" stop-color="${pal.trunkDark}"/>
       </linearGradient>
-      <radialGradient id="${uid}c" cx="35%" cy="28%" r="78%">
+      <radialGradient id="${uid}c" cx="35%" cy="25%" r="75%">
         <stop offset="0%" stop-color="${pal.leafLight}"/>
         <stop offset="100%" stop-color="${pal.leafDark}"/>
       </radialGradient>
     </defs>
-    <path d="M75,210 C72,172 68,142 77,112 C79,102 83,102 85,112 C93,142 89,172 87,210 Z"
-      fill="url(#${uid}t)" stroke="var(--ink)" stroke-width="1" stroke-opacity="0.22"/>
-    <g class="tree-canopy" style="transform-origin:80px 120px; animation-duration:${swayDur}s; animation-delay:${swayDelay}s;">
-      <path d="M80,18 C40,18 16,54 23,88 C8,97 6,126 30,134 C23,153 46,171 75,160 C89,171 119,166 127,143 C152,139 154,105 129,91 C138,58 109,26 80,18 Z"
-        fill="url(#${uid}c)" stroke="var(--ink)" stroke-width="1.1" stroke-opacity="0.26"/>
-      <path d="M40,70 C36,50 52,32 74,28" stroke="var(--ink)" stroke-width="0.8" fill="none" opacity="0.16"/>
-      <path d="M108,60 C119,78 112,101 96,111" stroke="var(--ink)" stroke-width="0.8" fill="none" opacity="0.16"/>
-      <ellipse cx="56" cy="58" rx="22" ry="15" fill="${pal.leafHi}" opacity="0.32"/>
+    <path d="M96,300 C93,246 90,198 98,152 C99,144 121,144 122,152 C130,198 127,246 124,300 Z"
+      fill="url(#${uid}t)" stroke="var(--ink)" stroke-width="1.2" stroke-opacity="0.22"/>
+    <g class="tree-canopy" style="transform-origin:110px 160px; animation-duration:${swayDur}s; animation-delay:${swayDelay}s;">
+      <path class="tree-branch" d="M100,160 C70,140 45,120 26,86" fill="none" stroke="${pal.trunkDark}" stroke-width="7" stroke-linecap="round"/>
+      <path class="tree-branch" d="M120,156 C150,130 178,105 199,76" fill="none" stroke="${pal.trunkDark}" stroke-width="7" stroke-linecap="round"/>
+      <path class="tree-branch" d="M98,188 C75,182 55,178 31,166" fill="none" stroke="${pal.trunkDark}" stroke-width="6" stroke-linecap="round"/>
+      <path class="tree-branch" d="M122,184 C148,190 172,196 195,206" fill="none" stroke="${pal.trunkDark}" stroke-width="6" stroke-linecap="round"/>
+      <ellipse cx="110" cy="150" rx="70" ry="55" fill="url(#${uid}c)" opacity="0.9"/>
+      <ellipse cx="55" cy="115" rx="42" ry="38" fill="url(#${uid}c)" stroke="var(--ink)" stroke-width="1" stroke-opacity="0.2"/>
+      <ellipse cx="168" cy="110" rx="44" ry="40" fill="url(#${uid}c)" stroke="var(--ink)" stroke-width="1" stroke-opacity="0.2"/>
+      <ellipse cx="70" cy="165" rx="34" ry="28" fill="url(#${uid}c)" stroke="var(--ink)" stroke-width="1" stroke-opacity="0.18"/>
+      <ellipse cx="155" cy="172" rx="34" ry="28" fill="url(#${uid}c)" stroke="var(--ink)" stroke-width="1" stroke-opacity="0.18"/>
+      <ellipse cx="110" cy="95" rx="80" ry="70" fill="url(#${uid}c)" stroke="var(--ink)" stroke-width="1.1" stroke-opacity="0.24"/>
+      <ellipse cx="70" cy="65" rx="26" ry="18" fill="${pal.leafHi}" opacity="0.35"/>
     </g>
   </svg>`;
 }
@@ -388,17 +399,23 @@ function birdSvg(c){
     <defs><linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="${c.light}"/><stop offset="100%" stop-color="${c.main}"/>
     </linearGradient></defs>
-    <path d="M8,20 L0,14 L0,27 Z" fill="${c.main}" stroke="var(--ink)" stroke-width="0.5" stroke-opacity="0.28"/>
+    <path d="M9,19 L-2,12 L-1,20 L-2,28 L9,22 Z" fill="${c.main}" stroke="var(--ink)" stroke-width="0.5" stroke-opacity="0.28"/>
+    <path d="M2,15 L-1,20 L2,25" stroke="var(--ink)" stroke-width="0.4" fill="none" opacity="0.3"/>
     <ellipse cx="22" cy="21" rx="15" ry="10.5" fill="url(#${uid})" stroke="var(--ink)" stroke-width="0.7" stroke-opacity="0.3"/>
     <ellipse cx="23" cy="26" rx="9" ry="4.5" fill="${c.belly}" opacity="0.9"/>
     <circle cx="35" cy="13" r="7.6" fill="url(#${uid})" stroke="var(--ink)" stroke-width="0.7" stroke-opacity="0.3"/>
     <path d="M41,13 L46,11.4 L41,16.2 Z" fill="${c.beak}"/>
     <circle cx="37" cy="11" r="1.25" fill="var(--ink)"/>
+    <circle cx="36.6" cy="10.6" r="0.4" fill="#fff" opacity="0.85"/>
     <g class="bird-wing" style="transform-origin:22px 17px;">
-      <path d="M24,17 C15,8 3,10 1,19 C-1,26 11,30 22,25 C27,23 27,19.5 24,17 Z"
+      <path d="M25,15 C17,6 4,8 1,17 C0,21 5,24 12,24 C10,26 9,28 10,29 C16,29 22,26 24.5,20 C25.5,18 25.5,16.5 25,15 Z"
         fill="${c.wing}" stroke="var(--ink)" stroke-width="0.6" stroke-opacity="0.3"/>
+      <path d="M6,17 C10,19 15,20 21,18 M8,21 C13,22.5 18,22 22,20"
+        stroke="var(--ink)" stroke-width="0.5" fill="none" opacity="0.24"/>
+      <path d="M24,17 C15,8 3,10 1,19 C-1,26 11,30 22,25 C27,23 27,19.5 24,17 Z"
+        fill="${c.wing}" opacity="0.55" stroke="var(--ink)" stroke-width="0.5" stroke-opacity="0.22"/>
     </g>
-    <path d="M18,31 L18,35 M27,31 L27,35" stroke="var(--ink)" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+    <path d="M18,31 L17,35 M23,31.5 L23,35.5 M27,31 L28,35" stroke="var(--ink)" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
   </svg>`;
 }
 
@@ -441,74 +458,149 @@ function buildGrassSvg(){
   return `<svg class="grass-svg" viewBox="0 0 1000 90" preserveAspectRatio="none" overflow="visible">${blades}</svg>`;
 }
 
-/* trees a bird can call home — perch points are percentages of the
-   garden-scene box, so they track the trees at any viewport width */
+/* trees a bird can call home. widthPx/heightPx keep the 220:300 aspect
+   of treeSvg's viewBox so nothing looks stretched. Perch points are
+   percentages of each tree's own box, landing right on the four bare
+   branch tips drawn in treeSvg — they track any tree at any size. */
 const TREE_DEFS = [
-  { leftPct: 3,  widthPx: 148, heightPx: 202, palette: 0,
-    perches: [ {left:'12%', top:'20%'}, {left:'20%', top:'33%'} ] },
-  { leftPct: 63, widthPx: 126, heightPx: 174, palette: 1,
-    perches: [ {left:'75%', top:'17%'}, {left:'84%', top:'30%'} ] },
+  { leftPct: 2,  widthPx: 250, heightPx: 341, palette: 0 },
+  { leftPct: 62, widthPx: 200, heightPx: 273, palette: 1 },
+];
+const TREE_PERCHES = [
+  {left:'12%', top:'29%'}, {left:'90%', top:'25%'},
+  {left:'14%', top:'55%'}, {left:'89%', top:'69%'},
 ];
 const TREE_DEFS_FLAT = [];
-TREE_DEFS.forEach((t,i)=> t.perches.forEach(p=> TREE_DEFS_FLAT.push({ treeIdx:i, ...p })));
+TREE_DEFS.forEach((t,i)=> TREE_PERCHES.forEach(p=> TREE_DEFS_FLAT.push({ treeIdx:i, ...p })));
 
+/* ---------- tiny synthesized birdsong (no external audio file needed) ---------- */
+let _audioCtx = null;
+function getAudioCtx(){
+  if(!_audioCtx){
+    try{ _audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }
+    catch(e){ _audioCtx = null; }
+  }
+  if(_audioCtx && _audioCtx.state === 'suspended') _audioCtx.resume().catch(()=>{});
+  return _audioCtx;
+}
+function chirp(ctx, startTime, freqFrom, freqTo, dur, peak){
+  const osc = ctx.createOscillator(), gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(freqFrom, startTime);
+  osc.frequency.exponentialRampToValueAtTime(freqTo, startTime + dur*0.6);
+  osc.frequency.exponentialRampToValueAtTime(Math.max(200,freqFrom*0.9), startTime + dur);
+  gain.gain.setValueAtTime(0.0001, startTime);
+  gain.gain.exponentialRampToValueAtTime(peak, startTime + dur*0.15);
+  gain.gain.exponentialRampToValueAtTime(0.0001, startTime + dur);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(startTime); osc.stop(startTime + dur + 0.02);
+}
+function playBirdsong(){
+  const ctx = getAudioCtx();
+  if(!ctx) return;
+  const notes = [[2400,3200,0.09],[2650,3450,0.07],[2200,3000,0.1],[2750,3600,0.06]];
+  let t = ctx.currentTime;
+  notes.forEach(n=>{ chirp(ctx, t, n[0], n[1], n[2], 0.045); t += n[2] + rand(0.02,0.06); });
+}
+
+/* Birds drift in from the left/right edges at the same slow, gliding
+   pace as the bees, land on a bare branch tip, sit a while (occasionally
+   singing quietly), then either wing over to another branch or drift
+   back out of the page — same as the bees do. Clicking a perched bird
+   makes it rustle its feathers and burst into song (with audio). */
 class Bird{
-  constructor(scene, startPerch, idOffset){
+  constructor(scene, idOffset, onDone){
     this.scene = scene;
+    this.onDone = onDone;
     this.color = BIRD_PALETTE[idOffset % BIRD_PALETTE.length];
     this.el = document.createElement('div');
-    this.el.className = 'g-realbird perched';
+    this.el.className = 'g-realbird flying';
     this.el.innerHTML = birdSvg(this.color);
     scene.appendChild(this.el);
-    this.perch = startPerch;
-    this.facing = 1;
-    this.applyPerch();
+    const w = scene.clientWidth||320, h = scene.clientHeight||600;
+    const edge = Math.random()<0.5 ? 0 : 1;
+    this.x = edge===0 ? -40 : w+40;
+    this.y = rand(h*0.1, h*0.5);
+    this.vx = 0; this.vy = 0;
+    this.state = 'flying';
+    this.facing = edge===0 ? 1 : -1;
     this.el.addEventListener('click', (e)=>{ e.stopPropagation(); this.onClick(); });
-    this.flightTimer = setTimeout(()=>this.tryFly(), rand(7000,16000));
-    this.singTimer = setTimeout(()=>this.idleSingLoop(), rand(3000,7000));
+    this.pickPerchTarget();
+    this.update = this.update.bind(this);
+    this._raf = requestAnimationFrame(this.update);
   }
-  applyPerch(){
-    this.el.style.left = this.perch.left;
-    this.el.style.top = this.perch.top;
-    this.el.style.transform = `scaleX(${this.facing})`;
+  pickPerchTarget(){ this.target = TREE_DEFS_FLAT[Math.floor(Math.random()*TREE_DEFS_FLAT.length)]; }
+  targetPos(){
+    const treeEl = document.getElementById('tree'+this.target.treeIdx);
+    if(!treeEl) return { x:this.x, y:this.y };
+    const sceneRect = this.scene.getBoundingClientRect(), tr = treeEl.getBoundingClientRect();
+    return {
+      x: tr.left - sceneRect.left + tr.width * (parseFloat(this.target.left)/100),
+      y: tr.top - sceneRect.top + tr.height * (parseFloat(this.target.top)/100)
+    };
   }
-  idleSingLoop(){
-    if(!this.el.classList.contains('flying') && Math.random() < 0.7) this.sing(false);
-    this.singTimer = setTimeout(()=>this.idleSingLoop(), rand(5000,10000));
+  update(){
+    const w = this.scene.clientWidth||320, h = this.scene.clientHeight||600;
+    if(this.state==='perched'){
+      this.perchTimer--;
+      if(this.perchTimer>0){ this._raf = requestAnimationFrame(this.update); return; }
+      if(Math.random()<0.4){ this.startLeaving(); }
+      else { this.state='flying'; this.el.classList.add('flying'); this.el.classList.remove('perched'); this.pickPerchTarget(); }
+    }
+    let tx,ty,maxSpeed;
+    if(this.state==='leaving'){ tx=this.exitX; ty=this.exitY; maxSpeed=1.0; }
+    else { const p=this.targetPos(); tx=p.x; ty=p.y; maxSpeed=0.6; }
+    const dx=tx-this.x, dy=ty-this.y, d=Math.hypot(dx,dy)||1;
+    this.vx += (dx/d)*0.032; this.vy += (dy/d)*0.032;
+    const sp = Math.hypot(this.vx,this.vy);
+    if(sp>maxSpeed){ this.vx=this.vx/sp*maxSpeed; this.vy=this.vy/sp*maxSpeed; }
+    this.vx *= 0.95; this.vy *= 0.95;
+    this.x += this.vx; this.y += this.vy;
+    if(Math.abs(this.vx)>0.04) this.facing = this.vx>0 ? 1 : -1;
+    const bob = Math.sin(Date.now()/280)*1.6;
+    this.el.style.transform = `translate(${this.x.toFixed(1)}px, ${(this.y+bob).toFixed(1)}px) scaleX(${this.facing})`;
+    if(this.state==='leaving'){
+      if(this.x<-60 || this.x>w+60 || this.y<-60){
+        this.el.remove(); cancelAnimationFrame(this._raf);
+        if(this.onDone) this.onDone();
+        return;
+      }
+    } else if(d<12){ this.land(); return; }
+    this._raf = requestAnimationFrame(this.update);
   }
-  tryFly(){
-    const options = TREE_DEFS_FLAT.filter(p => p.left !== this.perch.left || p.top !== this.perch.top);
-    const next = options[Math.floor(Math.random()*options.length)];
-    this.flyTo(next);
+  land(){
+    this.state = 'perched'; this.vx=0; this.vy=0;
+    this.el.classList.remove('flying'); this.el.classList.add('perched');
+    this.perchTimer = Math.floor(rand(260,520));
+    this._raf = requestAnimationFrame(this.update);
+    this.maybeIdleSing();
   }
-  flyTo(target){
-    this.el.classList.remove('perched');
-    this.el.classList.add('flying');
-    const curX = parseFloat(this.perch.left), tgtX = parseFloat(target.left);
-    this.facing = tgtX >= curX ? 1 : -1;
-    this.el.style.transition = 'left 2.3s cubic-bezier(.4,0,.3,1), top 2.3s cubic-bezier(.4,0,.3,1)';
-    this.el.style.transform = `scaleX(${this.facing})`;
-    requestAnimationFrame(()=>{
-      this.el.style.left = target.left;
-      this.el.style.top = target.top;
-    });
-    clearTimeout(this._landTimer);
-    this._landTimer = setTimeout(()=>{
-      this.perch = target;
-      this.el.classList.remove('flying');
-      this.el.classList.add('perched');
-      this.el.style.transition = '';
-      this.flightTimer = setTimeout(()=>this.tryFly(), rand(8000,18000));
-    }, 2350);
+  maybeIdleSing(){
+    clearTimeout(this._singT);
+    this._singT = setTimeout(()=>{
+      if(this.state!=='perched') return;
+      if(Math.random()<0.5) this.sing(false);
+      this.maybeIdleSing();
+    }, rand(3500,7500));
+  }
+  startLeaving(){
+    const w = this.scene.clientWidth||320;
+    this.state = 'leaving';
+    this.el.classList.remove('perched'); this.el.classList.add('flying');
+    const edge = Math.random()<0.5 ? 0 : 1;
+    this.exitX = edge===0 ? -60 : w+60;
+    this.exitY = this.y - rand(0,60);
   }
   onClick(){
-    if(this.el.classList.contains('flying')) return;
+    if(this.state!=='perched') return;
     this.el.classList.add('preening');
     this.sing(true);
     setTimeout(()=>this.el.classList.remove('preening'), 1100);
+    this.perchTimer = Math.max(this.perchTimer, 200);
   }
   sing(loud){
     this.el.classList.add('singing');
+    if(loud) playBirdsong();
     const n = loud ? 3 : 1;
     for(let i=0;i<n;i++){
       setTimeout(()=>{
@@ -526,13 +618,15 @@ class Bird{
 }
 
 function spawnBirds(scene){
-  const slots = TREE_DEFS_FLAT.slice();
-  for(let i=slots.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [slots[i],slots[j]] = [slots[j],slots[i]];
+  const BIRD_MAX = 3;
+  let active = 0, seq = 0;
+  function launch(){
+    if(active >= BIRD_MAX){ setTimeout(launch, rand(2000,5000)); return; }
+    active++;
+    new Bird(scene, seq++, ()=>{ active--; setTimeout(launch, rand(2500,6000)); });
+    setTimeout(launch, rand(4000,9000));
   }
-  const count = Math.min(3, slots.length);
-  for(let i=0;i<count;i++) new Bird(scene, slots[i], i);
+  launch();
 }
 
 class Bee{
@@ -575,8 +669,12 @@ class Bee{
     this.vx *= 0.95; this.vy *= 0.95;
     this.x += this.vx; this.y += this.vy;
     const wob = Math.sin(Date.now()/150 + this.x)*3;
-    const facing = this.vx < -0.02 ? -1 : 1;
-    this.el.style.transform = `translate(${this.x.toFixed(1)}px, ${(this.y+wob).toFixed(1)}px) scaleX(${facing})`;
+    // the art faces left by default (head/antenna are on the left side),
+    // so flip it only when actually heading right, and tilt the nose
+    // up/down a little to match the vertical component of travel too
+    const facing = this.vx > 0.02 ? -1 : 1;
+    const pitch = Math.max(-22, Math.min(22, this.vy*46));
+    this.el.style.transform = `translate(${this.x.toFixed(1)}px, ${(this.y+wob).toFixed(1)}px) rotate(${pitch.toFixed(1)}deg) scaleX(${facing})`;
     if(!this.leaving && d<14 && Math.random()<0.02) this.pickTarget(w,h);
     if(this.leaving && (this.x < -50 || this.x > w+50 || this.y < -50)){
       this.el.remove();
@@ -596,6 +694,102 @@ function spawnBees(scene){
     active++;
     new Bee(scene, ()=>{ active--; setTimeout(launch, rand(2500,6000)); });
     setTimeout(launch, rand(3500,7000));
+  }
+  launch();
+}
+
+/* Garden butterflies — the same drifting-in-and-out cast that floats
+   over every other page, brought into the garden. They wander in from
+   an edge at the bees' same gentle pace, land on a flower for a few
+   seconds, then move to another flower or drift back out — automatically,
+   or right away if clicked while perched. */
+class GardenButterfly{
+  constructor(scene, onDone){
+    this.scene = scene;
+    this.onDone = onDone;
+    this.color = PALETTE[Math.floor(Math.random()*PALETTE.length)];
+    this.el = document.createElement('div');
+    this.el.className = 'g-driftbutterfly';
+    this.el.innerHTML = butterflySvg(this.color);
+    scene.appendChild(this.el);
+    this.el.addEventListener('click', (e)=>{ e.stopPropagation(); this.onClick(); });
+    const w = scene.clientWidth||320, h = scene.clientHeight||600;
+    const edge = Math.random()<0.5 ? 0 : 1;
+    this.x = edge===0 ? -30 : w+30;
+    this.y = rand(h*0.55, h*0.85);
+    this.vx = 0; this.vy = 0;
+    this.state = 'flying';
+    this.facing = edge===0 ? 1 : -1;
+    this.pickTarget(w,h);
+    this.update = this.update.bind(this);
+    this._raf = requestAnimationFrame(this.update);
+  }
+  pickTarget(w,h){
+    const flowers = Array.from(this.scene.querySelectorAll('.planted'));
+    if(flowers.length && Math.random()<0.85){
+      const f = flowers[Math.floor(Math.random()*flowers.length)];
+      const sceneRect = this.scene.getBoundingClientRect(), fr = f.getBoundingClientRect();
+      this.tx = fr.left - sceneRect.left + fr.width/2;
+      this.ty = fr.top - sceneRect.top + 6;
+    } else {
+      this.tx = rand(w*0.15, w*0.85);
+      this.ty = rand(h*0.45, h*0.8);
+    }
+  }
+  update(){
+    const w = this.scene.clientWidth||320, h = this.scene.clientHeight||600;
+    if(this.state==='perched'){
+      this.perchTimer--;
+      if(this.perchTimer>0){ this._raf = requestAnimationFrame(this.update); return; }
+      if(Math.random()<0.45){ this.startLeaving(); }
+      else { this.state='flying'; this.el.classList.remove('perched'); this.pickTarget(w,h); }
+    }
+    let tx,ty,maxSpeed;
+    if(this.state==='leaving'){ tx=this.exitX; ty=this.exitY; maxSpeed=1.0; }
+    else { tx=this.tx; ty=this.ty; maxSpeed=0.55; }
+    const dx=tx-this.x, dy=ty-this.y, d=Math.hypot(dx,dy)||1;
+    this.vx += (dx/d)*0.03; this.vy += (dy/d)*0.03;
+    const sp = Math.hypot(this.vx,this.vy);
+    if(sp>maxSpeed){ this.vx=this.vx/sp*maxSpeed; this.vy=this.vy/sp*maxSpeed; }
+    this.vx *= 0.95; this.vy *= 0.95;
+    this.x += this.vx; this.y += this.vy;
+    if(Math.abs(this.vx)>0.03) this.facing = this.vx>0 ? 1 : -1;
+    const wob = Math.sin(Date.now()/260 + this.x*0.02)*3;
+    this.el.style.transform = `translate(${this.x.toFixed(1)}px, ${(this.y+wob).toFixed(1)}px) scaleX(${this.facing})`;
+    if(this.state==='leaving'){
+      if(this.x<-60 || this.x>w+60 || this.y<-60){
+        this.el.remove(); cancelAnimationFrame(this._raf);
+        if(this.onDone) this.onDone();
+        return;
+      }
+    } else if(d<10){ this.land(); return; }
+    this._raf = requestAnimationFrame(this.update);
+  }
+  land(){
+    this.state = 'perched'; this.vx=0; this.vy=0;
+    this.el.classList.add('perched');
+    this.perchTimer = Math.floor(rand(180,340));
+    this._raf = requestAnimationFrame(this.update);
+  }
+  startLeaving(){
+    const w = this.scene.clientWidth||320;
+    this.state = 'leaving';
+    this.el.classList.remove('perched');
+    const edge = Math.random()<0.5 ? 0 : 1;
+    this.exitX = edge===0 ? -60 : w+60;
+    this.exitY = this.y - rand(-30,60);
+  }
+  onClick(){ if(this.state==='perched') this.startLeaving(); }
+}
+
+function spawnGardenButterflies(scene){
+  const BFLY_MAX = 2;
+  let active = 0;
+  function launch(){
+    if(active >= BFLY_MAX){ setTimeout(launch, rand(2500,5000)); return; }
+    active++;
+    new GardenButterfly(scene, ()=>{ active--; setTimeout(launch, rand(3000,7000)); });
+    setTimeout(launch, rand(4500,9000));
   }
   launch();
 }
@@ -947,6 +1141,7 @@ async function initGarden(){
 
   spawnBirds(scene);
   spawnBees(scene);
+  spawnGardenButterflies(scene);
 
   let list = [];
   try{
@@ -984,8 +1179,9 @@ function buildGardenSceneShell(scene){
 
   scene.innerHTML = `
     <div class="g-sun"></div>
-    <div class="g-cloud-wrap" style="left:8%; top:5%; animation-duration:84s; animation-delay:-10s;">${cloudSvg()}</div>
-    <div class="g-cloud-wrap" style="left:56%; top:2%; animation-duration:98s; animation-delay:-42s;">${cloudSvg()}</div>
+    <div class="g-cloud-wrap" style="left:6%; top:4%; width:170px; animation-duration:84s; animation-delay:-10s;">${cloudSvg()}</div>
+    <div class="g-cloud-wrap" style="left:46%; top:1%; width:120px; animation-duration:98s; animation-delay:-42s;">${cloudSvg()}</div>
+    <div class="g-cloud-wrap" style="left:74%; top:7%; width:145px; animation-duration:110s; animation-delay:-64s;">${cloudSvg()}</div>
     <div class="g-hill-back"></div>
     ${treesHtml}
     <div class="g-bush" style="left:26%; animation-duration:${(3.4+Math.random()).toFixed(1)}s; animation-delay:${(-Math.random()*2).toFixed(1)}s;"></div>
